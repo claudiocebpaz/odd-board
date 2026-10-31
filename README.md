@@ -100,7 +100,7 @@ See [docs/roadmap.md](docs/roadmap.md).
 
 ## Contributing
 
-Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md). The most useful contribution early on is a real ODD feature document that the parser gets wrong.
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md). The most useful contribution early on is a real ODD feature document that the parser gets wrong. The repository ships an optional, project-scoped gentle-ai ODD setup for Claude Code and OpenCode; its requirements are in CONTRIBUTING.md.
 
 ## License
 
