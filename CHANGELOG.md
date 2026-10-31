@@ -7,6 +7,8 @@ All notable changes to this project are documented here. The format follows [Kee
 Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A representative set is now a test fixture (`test/fixtures/gentle-ai-v4.3.1/`).
 
 ### Added
+- README links the npm package, adds Install (npx, global, from source) and a "Requirements and dependencies" section: Node.js 18.18+, optional git 2.28+, a browser, optional gentle-ai, and zero runtime dependencies.
+- README carries a short "Unofficial community project" note under the quick start, stating odd-board is not affiliated with, sponsored or endorsed by the Gentle AI project.
 - README opens with a demo GIF (`docs/demo.gif`) of `--demo`: a subagent finishing and CSV export tasks advancing.
 - Optional project-scoped gentle-ai ODD setup for contributors using Claude Code (`.claude/`, `.mcp.json`) or OpenCode (`opencode.json`, `.opencode/`). Requirements are documented in `CONTRIBUTING.md`. The published package is unchanged.
 - Contribution workflow modeled on gentle-ai: issue templates (Parsing Problem, Bug Report, Feature Request) with blank issues off, a structured PR template with AI-assistance disclosure, `AI_POLICY.md`, `CONTRIBUTORS.md`, and a label catalog (`type:`, `status:`, `priority:`, `area:`).
@@ -28,7 +30,7 @@ Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A repre
 - Checkboxes and headings inside code blocks are ignored.
 - "No longer blocked", "ya no está bloqueado" and "waiting for CI" no longer flag a card as blocked.
 - Test summaries with zero failures ("42 passed, 0 failed", "failures: 0") no longer count as pending checks, so finished features reach Closed.
-- The README disclaimer now follows gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia, and the README states that odd-board is not sponsored by the project. The `engram` npm keyword was removed because odd-board does not read Engram.
+- The README disclaimer now follows gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia, instead of "Gentleman Programming". The `engram` npm keyword was removed because odd-board does not read Engram.
 
 ## [0.2.0] - 2026-10-31
 

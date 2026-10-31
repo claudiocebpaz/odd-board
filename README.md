@@ -1,5 +1,7 @@
 # odd-board
 
+[![npm](https://img.shields.io/npm/v/odd-board?logo=npm)](https://www.npmjs.com/package/odd-board) [![CI](https://github.com/claudiocebpaz/odd-board/actions/workflows/ci.yml/badge.svg)](https://github.com/claudiocebpaz/odd-board/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) ![runtime dependencies: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)
+
 A live Kanban board for **ODD (Organic Driven Development)** feature documents, with parallel agents made visible.
 
 `odd-board` reads the `odd/tasks/*.md` files that ODD writes, in your repository and in every git worktree, and shows each tracked feature as a card that moves on its own as your agents work. It also shows which agents are working right now and on what. No backend, no database, no account, and zero runtime dependencies.
@@ -11,7 +13,43 @@ npx odd-board            # in a repository that uses ODD
 npx odd-board --demo     # temporary repo with simulated agents working in parallel
 ```
 
-> **Unofficial community project.** odd-board is not affiliated with, sponsored or endorsed by the Gentle AI project or its maintainers. Gentle AI™ and Engram™ are trademarks of Alan Buscaglia. odd-board only reads the files ODD produces and is compatible with Gentle AI v4.3.1.
+<sub>ℹ️ Unofficial community project, not affiliated with, sponsored or endorsed by the [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai) project. Gentle AI™ and Engram™ are trademarks of Alan Buscaglia. odd-board only reads the files ODD produces; report its problems here, not to gentle-ai.</sub>
+
+## Install
+
+odd-board is published on npm as [`odd-board`](https://www.npmjs.com/package/odd-board). You do not need to install it to try it:
+
+```bash
+npx odd-board --demo --open    # no install, opens a demo board in your browser
+```
+
+Or install it once and run it anywhere:
+
+```bash
+npm install -g odd-board
+odd-board ~/code/my-repo --open
+```
+
+From source (no `npm install` needed, there is nothing to install):
+
+```bash
+git clone https://github.com/claudiocebpaz/odd-board.git
+cd odd-board
+node bin/odd-board.js --demo --open
+```
+
+## Requirements and dependencies
+
+odd-board has **zero runtime dependencies**: `package.json` has no `dependencies` and no `devDependencies`, and there is no build step. The whole package is a CLI, a few modules and a single HTML page.
+
+| What | Needed? | Why |
+| --- | --- | --- |
+| [Node.js](https://nodejs.org/) 18.18 or later | Required | Runs the CLI and the local web server. Only Node's standard library is used: `node:http`, `node:fs`, `node:path`, `node:child_process`, `node:os`, `node:url`, `node:util`. Tests use the built-in `node:test`. |
+| [Git](https://git-scm.com/) 2.28 or later | Optional, required for `--demo` | Finds worktrees (`git worktree list`) and agent activity (`git status`, `git log`). Without git, odd-board reads a single `odd/tasks` folder and shows no agents. `--demo` creates a throwaway repository with `git init` and `git worktree add`. |
+| A web browser | Required to see the board | Any modern browser. The page loads nothing from the internet: no CDN, fonts or analytics. `--open` uses `open` (macOS), `start` (Windows) or `xdg-open` (Linux). `--json` needs no browser. |
+| [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) with ODD | Optional | It is what writes the `odd/tasks/*.md` feature documents in your repository. odd-board never installs, calls or talks to it; any Markdown file in `odd/tasks/` is read. Without it, use `--demo`. |
+
+Nothing else: no database, no account, no API key, no network access. The server listens on `127.0.0.1:4747` by default and only reads files; it never writes to your `odd/` folder.
 
 ## How it works
 
@@ -91,7 +129,7 @@ const board = await buildBoard('/path/to/repo');
 
 ## Compatibility
 
-- Node.js 18.18 or later. Git is optional: without it, odd-board reads a single folder and shows no agent activity.
+- Node.js 18.18 or later, git optional. See [Requirements and dependencies](#requirements-and-dependencies).
 - Tested against the real feature documents in gentle-ai **v4.3.1** (all 54 documents under `odd/` at tag `v4.3.1`; a representative set is kept as fixtures in `test/fixtures/gentle-ai-v4.3.1/`). ODD's document format is not a stable contract, so the parser is intentionally tolerant. If a new gentle-ai release breaks parsing, please open an issue with a sample document.
 - Works with any harness that runs ODD (Claude Code, OpenCode, Codex, Pi and others), because it only reads files.
 
