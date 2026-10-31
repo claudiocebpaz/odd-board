@@ -87,3 +87,48 @@ test('strips trailing evidence references from task labels', () => {
   assert.equal(card.tasks[1].text, 'Map');
   assert.equal(card.tasks[1].commit, '7b20e41');
 });
+
+const fixture = (name) => readFile(join(here, 'fixtures', `${name}.md`), 'utf8');
+
+test('a closed feature with sub-items, code blocks and a clean test run is closed', async () => {
+  const card = parseFeatureDoc(await fixture('bulk-import'), 'odd/tasks/bulk-import.md');
+  assert.deepEqual(card.tasks.map((t) => t.id), ['T1', 'T2', 'T3']);
+  assert.deepEqual(card.progress, { done: 3, total: 3 });
+  assert.equal(card.blocked, false);
+  assert.equal(card.pendingChecks, false);
+  assert.equal(columnFor(card), 'closed');
+  assert.equal(card.nextStep, 'None. Ready for PR.');
+});
+
+test('numbers in task text are not commits, but keyword and backtick references are', async () => {
+  const card = parseFeatureDoc(await fixture('bulk-import'), 'bulk-import.md');
+  assert.equal(card.tasks[0].commit, '3f9a01c');
+  assert.equal(card.tasks[1].commit, '1234567');
+  assert.equal(card.tasks[2].commit, '8c2d4e1');
+  const bare = parseFeatureDoc('# N\n- [x] T1: Import 10000000 rows\n- [x] T2: Fix bug 4e19ab2\n', 'n.md');
+  assert.equal(bare.tasks[0].commit, null);
+  assert.equal(bare.tasks[1].commit, '4e19ab2');
+});
+
+test('checkboxes inside code blocks are not tasks', () => {
+  const md = '# C\n\n## Tasks\n- [x] T1: real\n\n```md\n## Progress\n- [ ] example\n```\n\n## Progress\nDone.\n';
+  const card = parseFeatureDoc(md, 'c.md');
+  assert.deepEqual(card.progress, { done: 1, total: 1 });
+});
+
+test('negated blocked wording does not flag the card', () => {
+  const card = (progress) => parseFeatureDoc(`# B\n- [x] T1: a\n\n## Progress\n${progress}\n`, 'b.md');
+  assert.equal(card('No longer blocked: infra confirmed the limit.').blocked, false);
+  assert.equal(card('Ya no está bloqueado.').blocked, false);
+  assert.equal(card('Waiting for CI to finish.').blocked, false);
+  assert.equal(card('Blocked: waiting for the API key.').blocked, true);
+});
+
+test('zero failures in a test summary is not a pending check', () => {
+  const card = (evidence) => parseFeatureDoc(`# F\n- [x] T1: a\n\n## Evidence\n${evidence}\n`, 'f.md');
+  assert.equal(card('42 passed, 0 failed').pendingChecks, false);
+  assert.equal(card('failures: 0').pendingChecks, false);
+  assert.equal(card('0 fallos, 12 tests').pendingChecks, false);
+  assert.equal(card('40 passed, 2 failed').pendingChecks, true);
+  assert.equal(card('40 passed 2 failed 0 skipped').pendingChecks, true);
+});
