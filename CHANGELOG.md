@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+- Numbers in task text (for example "10000000 rows") are no longer read as commits. A bare hash must mix letters and digits; hashes next to `evidence`/`commit` or in backticks are always accepted.
+- Indented checkboxes under a task (acceptance criteria) no longer count as tasks.
+- Checkboxes and headings inside code blocks are ignored.
+- "No longer blocked", "ya no está bloqueado" and "waiting for CI" no longer flag a card as blocked.
+- Test summaries with zero failures ("42 passed, 0 failed", "failures: 0") no longer count as pending checks, so finished features reach Closed.
+
 ## [0.2.0] - 2026-10-31
 
 ### Added
