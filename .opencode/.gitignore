@@ -1,0 +1,4 @@
+node_modules
+package-lock.json
+bun.lock
+.gentle-ai-telemetry-runtime.json
