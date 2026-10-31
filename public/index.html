@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>odd-board</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #161a21; --card: #1d222b; --line: #2a303b;
+    --text: #e6e8eb; --muted: #8b93a1; --accent: #5b9dff; --ok: #3fb97f;
+    --warn: #e0a43a; --bad: #ef5b5b; --radius: 10px;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root.auto { --bg: #f6f7f9; --panel: #eceef2; --card: #fff; --line: #d9dde4; --text: #14171c; --muted: #5d6573; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); }
+  header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header h1 { font-size: 16px; font-weight: 600; margin: 0; }
+  .stat { font-size: 13px; color: var(--muted); }
+  .stat b { color: var(--text); font-weight: 600; }
+  .live { margin-left: auto; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .dot.on { background: var(--ok); }
+  main { display: grid; grid-template-columns: repeat(4, minmax(240px, 1fr)); gap: 12px; padding: 16px 20px; overflow-x: auto; }
+  .col { background: var(--panel); border-radius: var(--radius); padding: 10px; min-height: 60vh; }
+  .col h2 { font-size: 12px; font-weight: 600; color: var(--muted); margin: 2px 4px 10px; display: flex; justify-content: space-between; letter-spacing: .02em; }
+  .col h2 small { font-weight: 400; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+  .card.blocked { border-color: var(--bad); }
+  .card .name { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
+  .card .meta { font-size: 12px; color: var(--muted); margin: 0; }
+  .badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 6px; margin-left: 6px; vertical-align: 1px; }
+  .badge.bad { background: color-mix(in srgb, var(--bad) 20%, transparent); color: var(--bad); }
+  .badge.warn { background: color-mix(in srgb, var(--warn) 20%, transparent); color: var(--warn); }
+  .bar { height: 4px; background: var(--line); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .closed .bar > i { background: var(--ok); }
+  .blocked .bar > i { background: var(--bad); }
+  .tasks { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .tasks li { display: flex; gap: 8px; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .tasks li:last-child { border-bottom: 0; }
+  .tasks .ic { width: 14px; flex: none; text-align: center; }
+  .tasks .done .ic { color: var(--ok); }
+  .tasks .current .ic { color: var(--accent); }
+  .tasks .open .ic { color: var(--muted); }
+  .tasks small { display: block; color: var(--muted); font-size: 11px; }
+  .empty { font-size: 12px; color: var(--muted); padding: 8px 4px; }
+  .hint { padding: 40px 20px; color: var(--muted); font-size: 14px; text-align: center; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="repo">odd-board</h1>
+  <span class="stat"><b id="features">0</b> features</span>
+  <span class="stat"><b id="tasks">0/0</b> tasks</span>
+  <span class="stat"><b id="blocked">0</b> blocked</span>
+  <span class="live"><span class="dot" id="dot"></span><span id="status">connecting</span></span>
+</header>
+<main id="board"></main>
+<script>
+  const expanded = new Set(JSON.parse(sessionStorageGet('odd-board:expanded') || '[]'));
+  function sessionStorageGet(k) { try { return sessionStorage.getItem(k); } catch { return null; } }
+  function sessionStorageSet(k, v) { try { sessionStorage.setItem(k, v); } catch {} }
+
+  function el(tag, attrs = {}, ...children) {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') node.className = v;
+      else if (k === 'style') node.style.cssText = v;
+      else if (k.startsWith('on')) node.addEventListener(k.slice(2), v);
+      else node.setAttribute(k, v);
+    }
+    for (const c of children.flat()) if (c != null) node.append(c);
+    return node;
+  }
+
+  function taskItem(t) {
+    const state = t.done ? 'done' : t.current ? 'current' : 'open';
+    const icon = t.done ? '✓' : t.current ? '●' : '○';
+    const sub = t.done ? (t.commit ? `commit ${t.commit}` : 'done') : t.current ? 'in progress' : 'pending';
+    return el('li', { class: state }, el('span', { class: 'ic' }, icon), el('div', {}, `${t.id}. ${t.text}`, el('small', {}, sub)));
+  }
+
+  function card(c, column) {
+    const pct = c.progress.total ? Math.round((c.progress.done / c.progress.total) * 100) : 0;
+    const isOpen = expanded.has(c.feature);
+    const meta = c.parsed === false
+      ? 'not parsed'
+      : `${c.progress.done}/${c.progress.total} tasks${c.nextStep ? ' · ' + c.nextStep : ''}`;
+    return el('div', {
+        class: `card ${column}${c.blocked ? ' blocked' : ''}`,
+        title: c.file,
+        onclick: () => {
+          isOpen ? expanded.delete(c.feature) : expanded.add(c.feature);
+          sessionStorageSet('odd-board:expanded', JSON.stringify([...expanded]));
+          render(window.__board);
+        },
+      },
+      el('p', { class: 'name' }, c.title,
+        c.blocked ? el('span', { class: 'badge bad' }, 'blocked') : null,
+        c.parsed === false ? el('span', { class: 'badge warn' }, 'unparsed') : null),
+      el('p', { class: 'meta' }, meta),
+      el('div', { class: 'bar' }, el('i', { style: `width:${pct}%` })),
+      isOpen && c.tasks.length ? el('ul', { class: 'tasks' }, c.tasks.map(taskItem)) : null,
+    );
+  }
+
+  function render(board) {
+    window.__board = board;
+    document.getElementById('repo').textContent = board.repo;
+    document.getElementById('features').textContent = board.totals.features;
+    document.getElementById('tasks').textContent = `${board.totals.tasksDone}/${board.totals.tasksTotal}`;
+    document.getElementById('blocked').textContent = board.totals.blocked;
+    const root = document.getElementById('board');
+    root.replaceChildren(...board.columns.map((col) =>
+      el('section', { class: 'col' },
+        el('h2', {}, el('span', {}, col.title), el('small', {}, String(col.cards.length))),
+        col.cards.length ? col.cards.map((c) => card(c, col.id)) : el('div', { class: 'empty' }, 'Nothing here'),
+      )));
+    if (!board.totals.features) {
+      root.after(Object.assign(document.querySelector('.hint') || el('div', { class: 'hint' }), {
+        textContent: 'No feature documents yet. They appear here when ODD tracks substantial work in odd/tasks/.',
+      }));
+    } else document.querySelector('.hint')?.remove();
+  }
+
+  function connect() {
+    const dot = document.getElementById('dot');
+    const status = document.getElementById('status');
+    const es = new EventSource('/events');
+    es.onopen = () => { dot.classList.add('on'); status.textContent = 'live'; };
+    es.onmessage = (e) => render(JSON.parse(e.data));
+    es.onerror = () => { dot.classList.remove('on'); status.textContent = 'reconnecting'; };
+  }
+  connect();
+</script>
+</body>
+</html>

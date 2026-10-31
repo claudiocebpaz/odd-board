@@ -1,0 +1,47 @@
+{
+  "name": "odd-board",
+  "version": "0.1.0",
+  "description": "Live Kanban board for ODD (Organic Driven Development) feature documents. Reads odd/tasks/*.md, no backend.",
+  "type": "module",
+  "bin": {
+    "odd-board": "bin/odd-board.js"
+  },
+  "exports": {
+    ".": "./src/board.js",
+    "./parse": "./src/parse.js",
+    "./columns": "./src/columns.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "public",
+    "examples"
+  ],
+  "scripts": {
+    "start": "node bin/odd-board.js",
+    "demo": "node bin/odd-board.js --demo --open",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "keywords": [
+    "odd",
+    "organic-driven-development",
+    "kanban",
+    "ai-agents",
+    "claude-code",
+    "opencode",
+    "engram"
+  ],
+  "author": "Claudio Ceballos Paz",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OWNER/odd-board.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OWNER/odd-board/issues"
+  },
+  "homepage": "https://github.com/OWNER/odd-board#readme"
+}

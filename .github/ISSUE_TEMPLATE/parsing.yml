@@ -1,0 +1,26 @@
+name: Parsing problem
+description: A feature document odd-board shows wrong
+labels: [parsing]
+body:
+  - type: textarea
+    id: document
+    attributes:
+      label: Feature document
+      description: Paste the odd/tasks/<feature>.md (redact anything private)
+      render: markdown
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: gentle-ai version
+      placeholder: output of `gentle-ai version`
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: Column, task counts, blocked state…
+    validations:
+      required: true
