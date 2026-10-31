@@ -1,0 +1,85 @@
+name: "🐛 Bug Report"
+description: Something in odd-board does not work (CLI, board, worktrees, server)
+title: "fix: "
+labels: ["type:bug", "status:needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a feature document that lands in the wrong column, use **Parsing Problem** instead.
+
+  - type: checkboxes
+    id: prereqs
+    attributes:
+      label: Pre-flight Checks
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: I can reproduce it with the latest odd-board release
+          required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear description of what is wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Run `npx odd-board ...`
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+
+  - type: input
+    id: odd-board-version
+    attributes:
+      label: odd-board Version
+      placeholder: "e.g. 0.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version (`node --version`) and git version (`git --version`)
+      placeholder: "e.g. macOS 15, Node 22.11, git 2.47"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected Area
+      options:
+        - CLI
+        - Board UI
+        - Worktrees / parallel agents
+        - Server / live updates
+        - Demo
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 💡 Logs / Error Output
+      description: Paste any relevant output. This will be auto-formatted as code.
+      render: shell
+    validations:
+      required: false

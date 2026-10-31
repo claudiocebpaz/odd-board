@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & Discussions
+    url: https://github.com/claudiocebpaz/odd-board/discussions
+    about: Use discussions for questions, not issues
+  - name: ODD itself (gentle-ai)
+    url: https://github.com/Gentleman-Programming/gentle-ai/issues
+    about: Problems with ODD, its feature documents or gentle-ai belong to the gentle-ai repository. odd-board only reads what ODD writes.

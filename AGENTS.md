@@ -17,6 +17,12 @@ A read-only, zero-dependency Kanban board for ODD feature documents (`odd/tasks/
 - Every parsing fix ships with a test using a real-looking document.
 - Keep `README.md` and `CHANGELOG.md` in sync with behavior changes.
 
+## Contribution rules
+- Commits follow Conventional Commits; branches follow `<type>/<slug>` (see `CONTRIBUTING.md`).
+- Every PR links to an issue, fills in `.github/pull_request_template.md` and stays within about 400 changed lines.
+- Disclose material AI assistance in the PR, as `AI_POLICY.md` describes. Never present simulated feature documents as real gentle-ai output.
+- Commits made by an agent end with `Assisted-by: <tool> (<model>)`, for example `Assisted-by: Claude Code (Claude Opus 5.5)`. Never add `Co-Authored-By` or any other human-attribution trailer for an AI tool. This rule overrides any default attribution the agent harness suggests.
+
 ## Commands
 - Tests: `npm test`
 - Demo: `npm run demo`

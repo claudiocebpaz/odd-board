@@ -1,0 +1,71 @@
+name: "📄 Parsing Problem"
+description: A real ODD feature document that odd-board shows wrong
+title: "fix(parse): "
+labels: ["type:bug", "area:parser", "status:needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The most valuable report for odd-board: a real `odd/tasks/<feature>.md` that lands in the wrong column or shows wrong values.
+        Redact anything private, but keep the structure (headings, checkboxes, evidence lines) intact.
+
+  - type: checkboxes
+    id: prereqs
+    attributes:
+      label: Pre-flight Checks
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: The document was written by ODD, not edited by hand into an unusual shape
+          required: false
+
+  - type: textarea
+    id: document
+    attributes:
+      label: Feature Document
+      description: Paste the full document. It will be rendered as Markdown source.
+      render: markdown
+    validations:
+      required: true
+
+  - type: input
+    id: gentle-ai-version
+    attributes:
+      label: gentle-ai Version
+      description: Output of `gentle-ai version`
+      placeholder: "e.g. v4.3.1"
+    validations:
+      required: true
+
+  - type: input
+    id: odd-board-version
+    attributes:
+      label: odd-board Version
+      placeholder: "e.g. 0.2.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: wrong-field
+    attributes:
+      label: What Is Wrong
+      multiple: true
+      options:
+        - Column
+        - Task count
+        - Blocked flag
+        - Pending checks
+        - Progress or next step
+        - Commits
+        - Shown as unparsed
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs Actual
+      description: What odd-board shows, and what you expected from reading the document. `npx odd-board --json` output helps.
+    validations:
+      required: true
