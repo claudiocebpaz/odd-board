@@ -4,7 +4,7 @@ A live Kanban board for **ODD (Organic Driven Development)** feature documents, 
 
 `odd-board` reads the `odd/tasks/*.md` files that ODD writes, in your repository and in every git worktree, and shows each tracked feature as a card that moves on its own as your agents work. It also shows which agents are working right now and on what. No backend, no database, no account, and zero runtime dependencies.
 
-![odd-board showing features across Tracked, Implementing, Verifying and Closed](docs/screenshot.png)
+![odd-board demo: a subagent finishes (3 agents active → 2) while CSV export moves from 3/6 to 5/6 tasks](docs/demo.gif)
 
 ```bash
 npx odd-board            # in a repository that uses ODD
