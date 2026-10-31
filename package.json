@@ -1,7 +1,7 @@
 {
   "name": "odd-board",
-  "version": "0.1.0",
-  "description": "Live Kanban board for ODD (Organic Driven Development) feature documents. Reads odd/tasks/*.md, no backend.",
+  "version": "0.2.0",
+  "description": "Live Kanban board for ODD (Organic Driven Development) feature documents. Reads odd/tasks/*.md and git worktrees to show parallel agents. No backend.",
   "type": "module",
   "bin": {
     "odd-board": "bin/odd-board.js"
@@ -26,6 +26,8 @@
     "node": ">=18.18"
   },
   "keywords": [
+    "git-worktree",
+    "parallel-agents",
     "odd",
     "organic-driven-development",
     "kanban",

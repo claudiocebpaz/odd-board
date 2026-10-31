@@ -7,6 +7,7 @@ A read-only, zero-dependency Kanban board for ODD feature documents (`odd/tasks/
 - Never add runtime dependencies. Node standard library only.
 - odd-board never writes to a user's `odd/` folder.
 - Board columns are derived in `src/columns.js`; never persist column state.
+- Parallel work comes only from git (worktrees, status, last commit). Never infer it from document text.
 - Parsing must never throw for a single bad document. Unknown documents render as `unparsed`.
 - Every parsing fix ships with a test using a real-looking document.
 - Keep `README.md` and `CHANGELOG.md` in sync with behavior changes.
@@ -20,7 +21,9 @@ A read-only, zero-dependency Kanban board for ODD feature documents (`odd/tasks/
 - `bin/odd-board.js` CLI
 - `src/parse.js` feature document parser
 - `src/columns.js` column derivation
-- `src/board.js` reads `odd/tasks` and builds the board
+- `src/board.js` reads `odd/tasks` in every worktree and builds the board
+- `src/git.js` worktrees and activity (the only source for parallel work)
+- `src/demo.js` temporary demo repo with simulated agents
 - `src/server.js` HTTP + SSE server and file watcher
 - `public/index.html` the board UI (no build step)
 - `examples/demo-repo` sample ODD documents used by `--demo` and tests

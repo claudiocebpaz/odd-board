@@ -1,14 +1,14 @@
 # odd-board
 
-A live Kanban board for **ODD (Organic Driven Development)** feature documents.
+A live Kanban board for **ODD (Organic Driven Development)** feature documents, with parallel agents made visible.
 
-`odd-board` reads the `odd/tasks/*.md` files that ODD writes in your repository and shows every tracked feature as a card that moves on its own as your agents work. No backend, no database, no account, and zero runtime dependencies.
+`odd-board` reads the `odd/tasks/*.md` files that ODD writes, in your repository and in every git worktree, and shows each tracked feature as a card that moves on its own as your agents work. It also shows which agents are working right now and on what. No backend, no database, no account, and zero runtime dependencies.
 
 ![odd-board showing features across Tracked, Implementing, Verifying and Closed](docs/screenshot.png)
 
 ```bash
 npx odd-board            # in a repository that uses ODD
-npx odd-board --demo     # try it with example documents
+npx odd-board --demo     # temporary repo with simulated agents working in parallel
 ```
 
 > **Unofficial community project.** odd-board is not affiliated with or endorsed by Gentleman Programming. ODD, Gentle-AI and Engram are their projects; this tool only reads the files ODD produces.
@@ -27,6 +27,22 @@ Columns are **never stored**. They are derived from each document every time it 
 | Closed | Close | All tasks checked, no pending checks |
 
 **Blocked** is a flag, not a column: the card stays in the stage where it stalled and is outlined in red.
+
+## Parallel work
+
+ODD records nothing about parallelism, so odd-board reads it from git, which knows it for certain:
+
+1. `git worktree list` finds every checkout of the repository.
+2. Each worktree is linked to a feature by its branch name. `feat/csv-export` is the feature's **primary** worker; `feat/csv-export-agent-2` (or any worktree nested inside the feature's worktree) is a **subagent** of the same feature.
+3. A worktree is **active** when it changed in the last 10 minutes (uncommitted files or a recent commit). Change the window with `--window <minutes>`.
+
+On the board, a card with active workers shows a pulsing "N agents working" line and lists its workers when expanded. The header counts active agents across the whole repository. A card that is in Implementing but has no active worker is in progress but stalled.
+
+The **Lanes** view shows one row per worktree: branch, feature, current task, changed files and last activity. It is the quickest way to see what is running in parallel tonight.
+
+![Lanes view with three active worktrees and one idle](docs/lanes.png)
+
+The feature document is read from the feature's own branch when that worktree exists, then from the main checkout. File modification time alone is not trusted, because a worktree created later holds an older copy with a newer timestamp.
 
 Authorize, Explore, Resolve uncertainty and Classify happen inside the agent session and never reach the file system, so they are not columns. Small work never gets a feature document, so it never shows up. That is ODD working as designed.
 
@@ -47,8 +63,10 @@ npx odd-board [repo-path] [options]
 
   -p, --port <n>   Port to listen on (default 4747)
   --host <host>    Host to bind (default 127.0.0.1)
+  --window <min>   Minutes since the last change for a worktree to count
+                   as an active agent (default 10)
   --json           Print the board as JSON and exit
-  --demo           Serve the bundled example documents
+  --demo           Temporary repo with worktrees and simulated parallel agents
   --open           Open the board in your browser
 ```
 
@@ -67,13 +85,13 @@ const board = await buildBoard('/path/to/repo');
 
 ## Compatibility
 
-- Node.js 18.18 or later.
+- Node.js 18.18 or later. Git is optional: without it, odd-board reads a single folder and shows no agent activity.
 - Tested against feature documents produced by gentle-ai v4.x. ODD's document format is not a stable contract, so the parser is intentionally tolerant. If a new gentle-ai release breaks parsing, please open an issue with a sample document.
 - Works with any harness that runs ODD (Claude Code, OpenCode, Codex, Pi and others), because it only reads files.
 
 ## Roadmap
 
-- Multi-repo view (one swimlane per repository).
+- Multi-repo view (one section per repository).
 - Optional enrichment with a cheap model through `opencode run` for summaries and blocked detection.
 - Optional GitHub column ("In PR") from the feature branch's pull request.
 - Claude Code plugin and OpenCode command that launch the board.

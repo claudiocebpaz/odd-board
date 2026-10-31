@@ -8,62 +8,85 @@
   :root {
     --bg: #0f1115; --panel: #161a21; --card: #1d222b; --line: #2a303b;
     --text: #e6e8eb; --muted: #8b93a1; --accent: #5b9dff; --ok: #3fb97f;
-    --warn: #e0a43a; --bad: #ef5b5b; --radius: 10px;
+    --warn: #e0a43a; --bad: #ef5b5b; --live: #3fb97f; --radius: 10px;
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  @media (prefers-color-scheme: light) {
-    :root.auto { --bg: #f6f7f9; --panel: #eceef2; --card: #fff; --line: #d9dde4; --text: #14171c; --muted: #5d6573; }
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text); }
-  header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
   header h1 { font-size: 16px; font-weight: 600; margin: 0; }
   .stat { font-size: 13px; color: var(--muted); }
   .stat b { color: var(--text); font-weight: 600; }
-  .live { margin-left: auto; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .stat.agents b { color: var(--live); }
+  .views { display: flex; gap: 2px; background: var(--panel); border-radius: 8px; padding: 2px; margin-left: auto; }
+  .views button { background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+  .views button.on { background: var(--card); color: var(--text); }
+  .live { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
   .dot.on { background: var(--ok); }
-  main { display: grid; grid-template-columns: repeat(4, minmax(240px, 1fr)); gap: 12px; padding: 16px 20px; overflow-x: auto; }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--live); flex: none; position: relative; }
+  .pulse::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--live); animation: ping 1.6s ease-out infinite; }
+  @keyframes ping { from { transform: scale(1); opacity: .7; } to { transform: scale(2.6); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .pulse::after { animation: none; } }
+  .idle { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--muted); flex: none; }
+  main { padding: 16px 20px; }
+  .board { display: grid; grid-template-columns: repeat(4, minmax(240px, 1fr)); gap: 12px; overflow-x: auto; }
   .col { background: var(--panel); border-radius: var(--radius); padding: 10px; min-height: 60vh; }
   .col h2 { font-size: 12px; font-weight: 600; color: var(--muted); margin: 2px 4px 10px; display: flex; justify-content: space-between; letter-spacing: .02em; }
   .col h2 small { font-weight: 400; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+  .card.working { border-color: color-mix(in srgb, var(--live) 55%, var(--line)); }
   .card.blocked { border-color: var(--bad); }
   .card .name { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
   .card .meta { font-size: 12px; color: var(--muted); margin: 0; }
+  .agents-line { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--live); margin-top: 8px; }
   .badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 6px; margin-left: 6px; vertical-align: 1px; }
   .badge.bad { background: color-mix(in srgb, var(--bad) 20%, transparent); color: var(--bad); }
   .badge.warn { background: color-mix(in srgb, var(--warn) 20%, transparent); color: var(--warn); }
   .bar { height: 4px; background: var(--line); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .bar > i { display: block; height: 100%; background: var(--accent); transition: width .4s ease; }
   .closed .bar > i { background: var(--ok); }
   .blocked .bar > i { background: var(--bad); }
-  .tasks { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--line); }
-  .tasks li { display: flex; gap: 8px; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--line); }
-  .tasks li:last-child { border-bottom: 0; }
-  .tasks .ic { width: 14px; flex: none; text-align: center; }
-  .tasks .done .ic { color: var(--ok); }
-  .tasks .current .ic { color: var(--accent); }
-  .tasks .open .ic { color: var(--muted); }
-  .tasks small { display: block; color: var(--muted); font-size: 11px; }
+  .list { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .list li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .list li:last-child { border-bottom: 0; }
+  .list .ic { width: 14px; flex: none; text-align: center; }
+  .list .done .ic { color: var(--ok); }
+  .list .current .ic { color: var(--accent); }
+  .list .open .ic { color: var(--muted); }
+  .list small { display: block; color: var(--muted); font-size: 11px; }
+  .list .w { align-items: center; }
   .empty { font-size: 12px; color: var(--muted); padding: 8px 4px; }
   .hint { padding: 40px 20px; color: var(--muted); font-size: 14px; text-align: center; }
+  .lanes { display: flex; flex-direction: column; gap: 8px; max-width: 980px; }
+  .lane { display: grid; grid-template-columns: 16px minmax(160px, 1.1fr) minmax(160px, 1.4fr) minmax(180px, 1.6fr) 110px; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; }
+  .lane.active { border-color: color-mix(in srgb, var(--live) 55%, var(--line)); }
+  .lane .sub { color: var(--muted); font-size: 11px; display: block; }
+  .lane .when { color: var(--muted); font-size: 12px; text-align: right; }
+  .lane-head { font-size: 11px; color: var(--muted); padding: 0 14px; display: grid; grid-template-columns: 16px minmax(160px, 1.1fr) minmax(160px, 1.4fr) minmax(180px, 1.6fr) 110px; gap: 12px; }
+  .role { font-size: 10px; padding: 1px 5px; border-radius: 5px; background: var(--panel); color: var(--muted); margin-left: 6px; }
   code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
 </style>
 </head>
 <body>
 <header>
   <h1 id="repo">odd-board</h1>
+  <span class="stat agents"><b id="agents">0</b> agents active</span>
   <span class="stat"><b id="features">0</b> features</span>
   <span class="stat"><b id="tasks">0/0</b> tasks</span>
   <span class="stat"><b id="blocked">0</b> blocked</span>
+  <div class="views" role="tablist">
+    <button id="v-board" class="on" role="tab">Board</button>
+    <button id="v-lanes" role="tab">Lanes</button>
+  </div>
   <span class="live"><span class="dot" id="dot"></span><span id="status">connecting</span></span>
 </header>
-<main id="board"></main>
+<main id="root"></main>
 <script>
-  const expanded = new Set(JSON.parse(sessionStorageGet('odd-board:expanded') || '[]'));
-  function sessionStorageGet(k) { try { return sessionStorage.getItem(k); } catch { return null; } }
-  function sessionStorageSet(k, v) { try { sessionStorage.setItem(k, v); } catch {} }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch { return null; } }
+  const expanded = new Set(JSON.parse(store('odd-board:expanded') || '[]'));
+  let view = store('odd-board:view') || 'board';
+  let board = null;
 
   function el(tag, attrs = {}, ...children) {
     const node = document.createElement(tag);
@@ -73,9 +96,21 @@
       else if (k.startsWith('on')) node.addEventListener(k.slice(2), v);
       else node.setAttribute(k, v);
     }
-    for (const c of children.flat()) if (c != null) node.append(c);
+    for (const c of children.flat()) if (c != null && c !== false) node.append(c);
     return node;
   }
+
+  function ago(ts) {
+    if (!ts) return '—';
+    const s = Math.max(0, Math.round((Date.now() - ts) / 1000));
+    if (s < 60) return `${s}s ago`;
+    const m = Math.round(s / 60);
+    if (m < 60) return `${m}m ago`;
+    const h = Math.round(m / 60);
+    return h < 48 ? `${h}h ago` : `${Math.round(h / 24)}d ago`;
+  }
+
+  const stateDot = (active) => el('span', { class: active ? 'pulse' : 'idle', 'aria-label': active ? 'active' : 'idle' });
 
   function taskItem(t) {
     const state = t.done ? 'done' : t.current ? 'current' : 'open';
@@ -84,19 +119,25 @@
     return el('li', { class: state }, el('span', { class: 'ic' }, icon), el('div', {}, `${t.id}. ${t.text}`, el('small', {}, sub)));
   }
 
+  function workerItem(w) {
+    const files = w.changedFiles ? `${w.changedFiles} file${w.changedFiles === 1 ? '' : 's'} changed · ` : '';
+    return el('li', { class: 'w' }, stateDot(w.active),
+      el('div', {}, w.branch || w.name, el('span', { class: 'role' }, w.role),
+        el('small', {}, `${files}${w.active ? 'working' : 'idle'} · ${ago(w.lastChange)}`)));
+  }
+
   function card(c, column) {
     const pct = c.progress.total ? Math.round((c.progress.done / c.progress.total) * 100) : 0;
     const isOpen = expanded.has(c.feature);
-    const meta = c.parsed === false
-      ? 'not parsed'
-      : `${c.progress.done}/${c.progress.total} tasks${c.nextStep ? ' · ' + c.nextStep : ''}`;
+    const working = c.activeWorkers > 0;
+    const meta = c.parsed === false ? 'not parsed' : `${c.progress.done}/${c.progress.total} tasks${c.nextStep ? ' · ' + c.nextStep : ''}`;
     return el('div', {
-        class: `card ${column}${c.blocked ? ' blocked' : ''}`,
+        class: `card ${column}${c.blocked ? ' blocked' : ''}${working ? ' working' : ''}`,
         title: c.file,
         onclick: () => {
           isOpen ? expanded.delete(c.feature) : expanded.add(c.feature);
-          sessionStorageSet('odd-board:expanded', JSON.stringify([...expanded]));
-          render(window.__board);
+          store('odd-board:expanded', JSON.stringify([...expanded]));
+          render();
         },
       },
       el('p', { class: 'name' }, c.title,
@@ -104,27 +145,57 @@
         c.parsed === false ? el('span', { class: 'badge warn' }, 'unparsed') : null),
       el('p', { class: 'meta' }, meta),
       el('div', { class: 'bar' }, el('i', { style: `width:${pct}%` })),
-      isOpen && c.tasks.length ? el('ul', { class: 'tasks' }, c.tasks.map(taskItem)) : null,
+      working ? el('div', { class: 'agents-line' }, el('span', { class: 'pulse' }),
+        `${c.activeWorkers} agent${c.activeWorkers === 1 ? '' : 's'} working`) : null,
+      isOpen && c.workers && c.workers.length ? el('ul', { class: 'list' }, c.workers.map(workerItem)) : null,
+      isOpen && c.tasks.length ? el('ul', { class: 'list' }, c.tasks.map(taskItem)) : null,
     );
   }
 
-  function render(board) {
-    window.__board = board;
-    document.getElementById('repo').textContent = board.repo;
-    document.getElementById('features').textContent = board.totals.features;
-    document.getElementById('tasks').textContent = `${board.totals.tasksDone}/${board.totals.tasksTotal}`;
-    document.getElementById('blocked').textContent = board.totals.blocked;
-    const root = document.getElementById('board');
-    root.replaceChildren(...board.columns.map((col) =>
+  function renderBoard(root) {
+    root.append(el('div', { class: 'board' }, board.columns.map((col) =>
       el('section', { class: 'col' },
         el('h2', {}, el('span', {}, col.title), el('small', {}, String(col.cards.length))),
         col.cards.length ? col.cards.map((c) => card(c, col.id)) : el('div', { class: 'empty' }, 'Nothing here'),
-      )));
-    if (!board.totals.features) {
-      root.after(Object.assign(document.querySelector('.hint') || el('div', { class: 'hint' }), {
-        textContent: 'No feature documents yet. They appear here when ODD tracks substantial work in odd/tasks/.',
-      }));
-    } else document.querySelector('.hint')?.remove();
+      ))));
+  }
+
+  function renderLanes(root) {
+    if (!board.lanes.length) {
+      root.append(el('div', { class: 'hint' }, 'No worktrees linked to ODD features yet. Lanes appear when agents work on feature branches.'));
+      return;
+    }
+    root.append(el('div', { class: 'lanes' },
+      el('div', { class: 'lane-head' }, el('span'), el('span', {}, 'Worktree'), el('span', {}, 'Feature'), el('span', {}, 'Current task'), el('span', { style: 'text-align:right' }, 'Last change')),
+      board.lanes.map((l) => el('div', { class: `lane${l.active ? ' active' : ''}` },
+        stateDot(l.active),
+        el('div', {}, l.branch || l.name, el('span', { class: 'sub' }, l.name)),
+        el('div', {}, l.featureTitle || 'Unassigned', l.role ? el('span', { class: 'role' }, l.role) : null),
+        el('div', {}, l.currentTask || '—', el('span', { class: 'sub' }, l.changedFiles ? `${l.changedFiles} file${l.changedFiles === 1 ? '' : 's'} changed` : 'clean')),
+        el('div', { class: 'when' }, l.active ? 'working' : 'idle', el('span', { class: 'sub' }, ago(l.lastChange))),
+      ))));
+  }
+
+  function render() {
+    if (!board) return;
+    document.getElementById('repo').textContent = board.repo;
+    document.getElementById('agents').textContent = board.totals.activeAgents;
+    document.getElementById('features').textContent = board.totals.features;
+    document.getElementById('tasks').textContent = `${board.totals.tasksDone}/${board.totals.tasksTotal}`;
+    document.getElementById('blocked').textContent = board.totals.blocked;
+    document.getElementById('v-board').classList.toggle('on', view === 'board');
+    document.getElementById('v-lanes').classList.toggle('on', view === 'lanes');
+    const root = document.getElementById('root');
+    root.replaceChildren();
+    if (!board.totals.features && view === 'board') {
+      root.append(el('div', { class: 'hint' }, 'No feature documents yet. They appear here when ODD tracks substantial work in odd/tasks/.'));
+      return;
+    }
+    view === 'lanes' ? renderLanes(root) : renderBoard(root);
+  }
+
+  for (const v of ['board', 'lanes']) {
+    document.getElementById(`v-${v}`).addEventListener('click', () => { view = v; store('odd-board:view', v); render(); });
   }
 
   function connect() {
@@ -132,10 +203,11 @@
     const status = document.getElementById('status');
     const es = new EventSource('/events');
     es.onopen = () => { dot.classList.add('on'); status.textContent = 'live'; };
-    es.onmessage = (e) => render(JSON.parse(e.data));
+    es.onmessage = (e) => { board = JSON.parse(e.data); render(); };
     es.onerror = () => { dot.classList.remove('on'); status.textContent = 'reconnecting'; };
   }
   connect();
+  setInterval(render, 30000);
 </script>
 </body>
 </html>

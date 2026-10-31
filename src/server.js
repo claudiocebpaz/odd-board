@@ -1,44 +1,50 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { watch, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildBoard, TASKS_DIR } from './board.js';
+import { buildBoard } from './board.js';
 
 const PUBLIC_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 
-export function startServer({ repoRoot, port = 4747, host = '127.0.0.1' }) {
+// Polls every worktree (documents + git activity) and pushes a new board over
+// Server-Sent Events only when something actually changed.
+export function startServer({ repoRoot, port = 4747, host = '127.0.0.1', intervalMs = 2000, activeWindowMs }) {
   const clients = new Set();
-  let timer = null;
+  let last = '';
+  let latest = null;
+  let busy = false;
 
-  const broadcast = () => {
-    clearTimeout(timer);
-    timer = setTimeout(async () => {
-      const payload = `data: ${JSON.stringify(await buildBoard(repoRoot))}\n\n`;
-      for (const res of clients) res.write(payload);
-    }, 150);
-  };
+  const fingerprint = (board) => JSON.stringify({ ...board, generatedAt: undefined });
 
-  // Watch odd/tasks; if it does not exist yet, wait for it to appear.
-  const tasksDir = join(repoRoot, TASKS_DIR);
-  let watcher = null;
-  const attach = () => {
-    if (watcher || !existsSync(tasksDir)) return;
-    watcher = watch(tasksDir, broadcast);
-    watcher.on('error', () => {
-      watcher = null;
-    });
-    broadcast();
+  const tick = async () => {
+    if (busy) return;
+    busy = true;
+    try {
+      const board = await buildBoard(repoRoot, { activeWindowMs });
+      const fp = fingerprint(board);
+      latest = board;
+      if (fp !== last) {
+        last = fp;
+        const payload = `data: ${JSON.stringify(board)}\n\n`;
+        for (const res of clients) res.write(payload);
+      }
+    } catch (err) {
+      console.error(`odd-board: ${err.message || err}`);
+    } finally {
+      busy = false;
+    }
   };
-  attach();
-  const poll = setInterval(attach, 2000);
+  tick();
+  const timer = setInterval(tick, intervalMs);
+
+  const current = async () => latest || buildBoard(repoRoot, { activeWindowMs });
 
   const server = createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     try {
       if (url.pathname === '/api/board') {
         res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
-        return res.end(JSON.stringify(await buildBoard(repoRoot)));
+        return res.end(JSON.stringify(await current()));
       }
       if (url.pathname === '/events') {
         res.writeHead(200, {
@@ -46,7 +52,7 @@ export function startServer({ repoRoot, port = 4747, host = '127.0.0.1' }) {
           'cache-control': 'no-cache',
           connection: 'keep-alive',
         });
-        res.write(`data: ${JSON.stringify(await buildBoard(repoRoot))}\n\n`);
+        res.write(`data: ${JSON.stringify(await current())}\n\n`);
         clients.add(res);
         req.on('close', () => clients.delete(res));
         return;
@@ -61,10 +67,7 @@ export function startServer({ repoRoot, port = 4747, host = '127.0.0.1' }) {
     }
   });
 
-  server.on('close', () => {
-    clearInterval(poll);
-    watcher?.close();
-  });
+  server.on('close', () => clearInterval(timer));
 
   return new Promise((resolve, reject) => {
     server.once('error', reject);
