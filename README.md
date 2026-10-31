@@ -21,10 +21,10 @@ Columns are **never stored**. They are derived from each document every time it 
 
 | Column | ODD stage | Rule |
 | --- | --- | --- |
-| Tracked | Track | Document exists, no task checked yet |
-| Implementing | Implement | Some tasks checked, some open |
-| Verifying | Close (in progress) | All tasks checked, but checks or review still pending |
-| Closed | Close | All tasks checked, no pending checks |
+| Tracked | Track | Document exists, no task done yet |
+| Implementing | Implement | Some tasks done, some open |
+| Verifying | Close (in progress) | All tasks done, but checks or review still pending |
+| Closed | Close | All tasks done, no pending checks |
 
 **Blocked** is a flag, not a column: the card stays in the stage where it stalled and is outlined in red.
 
@@ -50,9 +50,14 @@ Authorize, Explore, Resolve uncertainty and Classify happen inside the agent ses
 
 ODD does not define a status field or a fixed document schema. So:
 
-- **Deterministic:** task counts and progress come from checkboxes (`- [ ]` / `- [x]`). ODD only checks a task off with observed proof. Indented checkboxes under a task (acceptance criteria) and checkboxes inside code blocks are not counted as tasks.
-- **Commits:** a task's commit is a hash next to `evidence`/`commit` or in backticks. A bare hash must mix letters and digits, so numbers in the task text are not taken for commits.
-- **Heuristic:** "blocked" and "pending checks" are detected from wording in the Progress, Next step and Evidence sections (English and Spanish). Negations ("no longer blocked"), waiting on CI, and test summaries with zero failures ("42 passed, 0 failed") are ignored.
+- **Deterministic:** task counts and progress come from the state each task records. ODD only marks a task done with observed proof. Real gentle-ai documents record it in several ways, all supported:
+  - checkboxes: `- [ ]` / `- [x]`, anywhere in the document;
+  - inside a tasks section (`## Tasks`, `## Tareas`, `## Work units`): a table with a `Status` column, `- T1 | S1-S3 | ... | done | commit: <sha>` items, `1. [done] ...` items, and `- T1 — ...; inline; done, commit <sha>` items.
+
+  Status words are read in English and Spanish (`done`, `complete`, `committed`, `hecho` · `pending`, `in progress`, `later`, `pendiente` · `blocked`, `bloqueado`). `dropped` or `superseded` tasks stay on the card but count neither as done nor as remaining. Indented items under a task (acceptance criteria, evidence) and anything inside code blocks are not tasks.
+- **Commits:** a task's commit is a hash next to `evidence`/`commit`, in backticks, or in a `Commit` column. A bare hash must mix letters and digits, so numbers in the task text are not taken for commits, and hex IDs glued to a prefix (`review-562ea3fd…`, `sha256:…`) are not either.
+- **Next step:** a `## Next step` section, else the last `Next:` / `Next step:` / `Próximo paso:` line.
+- **Heuristic:** "blocked" and "pending checks" are detected from wording in the Progress, Next step and Evidence sections and top-level `Progress:` lines (English and Spanish). An open task marked blocked also flags the card. Negations ("no longer blocked"), something else being blocked ("a blocked request"), waiting on CI, test summaries with zero failures ("42 passed, 0 failed"), the RED step of test-first work, and failures the document calls pre-existing, unrelated or flaky are ignored. Wording cannot tell an old failure from a current one; see the known misses in `test/fixtures/gentle-ai-v4.3.1/README.md`.
 - **Optional override:** if a document has frontmatter with `status: planned | in-progress | verifying | blocked | done`, it wins. This is a convention on top of ODD, not part of it.
 
 Documents odd-board cannot understand are shown as `unparsed`. They are never dropped and never break the board.
@@ -87,7 +92,7 @@ const board = await buildBoard('/path/to/repo');
 ## Compatibility
 
 - Node.js 18.18 or later. Git is optional: without it, odd-board reads a single folder and shows no agent activity.
-- Tested against feature documents produced by gentle-ai v4.x. ODD's document format is not a stable contract, so the parser is intentionally tolerant. If a new gentle-ai release breaks parsing, please open an issue with a sample document.
+- Tested against the real feature documents in gentle-ai **v4.3.1** (all 54 documents under `odd/` at tag `v4.3.1`; a representative set is kept as fixtures in `test/fixtures/gentle-ai-v4.3.1/`). ODD's document format is not a stable contract, so the parser is intentionally tolerant. If a new gentle-ai release breaks parsing, please open an issue with a sample document.
 - Works with any harness that runs ODD (Claude Code, OpenCode, Codex, Pi and others), because it only reads files.
 
 ## Roadmap

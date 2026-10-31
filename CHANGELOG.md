@@ -4,12 +4,24 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A representative set is now a test fixture (`test/fixtures/gentle-ai-v4.3.1/`).
+
 ### Added
 - Optional project-scoped gentle-ai ODD setup for contributors using Claude Code (`.claude/`, `.mcp.json`) or OpenCode (`opencode.json`, `.opencode/`). Requirements are documented in `CONTRIBUTING.md`. The published package is unchanged.
 - Contribution workflow modeled on gentle-ai: issue templates (Parsing Problem, Bug Report, Feature Request) with blank issues off, a structured PR template with AI-assistance disclosure, `AI_POLICY.md`, `CONTRIBUTORS.md`, and a label catalog (`type:`, `status:`, `priority:`, `area:`).
 - `CONTRIBUTING.md` now documents the issue-first workflow, labels, Conventional Commits, branch naming and the PR size budget.
+- Task state from the formats real gentle-ai documents use besides checkboxes, inside a tasks section: tables with a `Status` column, `- T1 | ... | done | commit: <sha>` items, `1. [done] ...` items and `- T1 — ...; inline; done, commit <sha>` items. Status words in English and Spanish.
+- Dropped or superseded tasks stay on the card, marked "dropped", and are not counted.
+- An open task marked blocked (for example `**BLOCKED, NOT RUN**`) flags the card as blocked.
+- Next step from an inline `Next:` / `Next step:` line or a `## Remaining/next` section.
+- Top-level `Progress:` / `Status:` lines count as progress.
+- Task IDs like `T2b`, `T-01`, `OSP-1`, `GO-1a` and `T-C1`.
 
 ### Fixed
+- Eight real documents rendered as `unparsed` and two more as 0/0 because their tasks were not checkboxes.
+- The RED step of test-first work ("RED: go test ... failed") and failures marked pre-existing, unrelated or flaky no longer count as pending checks, so finished features reach Closed.
+- "A blocked request" and "dependency-blocked tests" no longer flag a card as blocked.
+- Review lineage IDs (`review-562ea3fd…`) and `sha256:` digests are no longer read as commits.
 - Numbers in task text (for example "10000000 rows") are no longer read as commits. A bare hash must mix letters and digits; hashes next to `evidence`/`commit` or in backticks are always accepted.
 - Indented checkboxes under a task (acceptance criteria) no longer count as tasks.
 - Checkboxes and headings inside code blocks are ignored.

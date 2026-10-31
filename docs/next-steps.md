@@ -14,11 +14,13 @@ Current version: **0.2.0**. Repository: https://github.com/claudiocebpaz/odd-boa
    `.github/workflows/release.yml` runs the tests, publishes to npm with provenance and creates the GitHub release.
 5. Check the name is still free right before publishing: `npm view odd-board` should return 404.
 
-## 2. Validate with real ODD output (highest priority after publishing)
+## 2. ~~Validate with real ODD output~~ Done (gentle-ai v4.3.1)
 
-1. Install gentle-ai with ODD for Claude Code in a test repository, run a substantial feature, and copy the resulting `odd/tasks/<feature>.md`.
-2. Add it as a fixture and a test. Fix the parser where it disagrees with reality.
-3. Record the tested gentle-ai version in the README "Compatibility" section.
+1. ~~Get real feature documents.~~ gentle-ai's own repository keeps 54 of them under `odd/`; all were parsed at tag `v4.3.1`.
+2. ~~Add fixtures and tests, fix the parser.~~ 11 fixtures in `test/fixtures/gentle-ai-v4.3.1/` (its README lists what each covers and the remaining known misses), tests in `test/gentle-ai.test.js`.
+3. ~~Record the tested version.~~ README "Compatibility" says v4.3.1.
+
+When a new gentle-ai release ships, re-run the same check: fetch `odd/tasks/*.md` at the new tag and compare the board with what the documents say.
 
 ## 3. README demo GIF
 
