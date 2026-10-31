@@ -21,7 +21,14 @@ When a new gentle-ai release ships, re-run the same check: fetch `odd/tasks/*.md
 
 ## 3. ~~README demo GIF~~ Done
 
-`docs/demo.gif` (960×420, 30 s, about 100 kB) is at the top of the README: the subagent finishing (agents 3 → 2) and csv-export going from 3/6 to 5/6. It was recorded from a fresh `--demo` with headless Chrome (one screenshot every 250 ms over the DevTools protocol), cropped and encoded with ffmpeg. Re-record when the UI changes.
+`docs/demo.gif` (960×420, 30 s, about 100 kB) is at the top of the README: the subagent finishing (agents 3 → 2) and csv-export going from 3/6 to 5/6. It was recorded from a fresh `--demo` with headless Chrome (one screenshot every 250 ms over the DevTools protocol), cropped and encoded with ffmpeg. Re-record when the UI changes, and copy the new GIF to the website repository too.
+
+## 3b. Website (in progress)
+
+https://claudiocebpaz.github.io/odd-board/, built with Astro from the private repository `claudiocebpaz/odd-board-site` and deployed by `.github/workflows/site.yml`. Tracked in `odd/tasks/website.md`; setup and rotation in [docs/website.md](website.md).
+
+1. Create `odd-board-site` (private) and build the site: scaffold and CI, English landing, then Spanish, OG banner, 404 and sitemap.
+2. **Owner:** set Pages source to GitHub Actions, add the deploy key and the `SITE_DEPLOY_KEY` secret, set the repository homepage, and run the Site workflow once.
 
 ## 4. v0.3 (see docs/roadmap.md)
 
