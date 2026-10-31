@@ -1,5 +1,10 @@
 # Agent instructions for odd-board
 
+## Start here
+1. `docs/CONTEXT.md` — why the project exists, what was verified about ODD, every design decision and known risks.
+2. `docs/next-steps.md` — current version, what is pending and in which order.
+3. `docs/roadmap.md` — planned versions.
+
 ## What this project is
 A read-only, zero-dependency Kanban board for ODD feature documents (`odd/tasks/*.md`).
 
