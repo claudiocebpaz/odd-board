@@ -28,6 +28,7 @@ Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A repre
 - Checkboxes and headings inside code blocks are ignored.
 - "No longer blocked", "ya no está bloqueado" and "waiting for CI" no longer flag a card as blocked.
 - Test summaries with zero failures ("42 passed, 0 failed", "failures: 0") no longer count as pending checks, so finished features reach Closed.
+- The README disclaimer now follows gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia, and the README states that odd-board is not sponsored by the project. The `engram` npm keyword was removed because odd-board does not read Engram.
 
 ## [0.2.0] - 2026-10-31
 

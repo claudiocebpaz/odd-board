@@ -11,7 +11,7 @@ npx odd-board            # in a repository that uses ODD
 npx odd-board --demo     # temporary repo with simulated agents working in parallel
 ```
 
-> **Unofficial community project.** odd-board is not affiliated with or endorsed by Gentleman Programming. ODD, Gentle-AI and Engram are their projects; this tool only reads the files ODD produces.
+> **Unofficial community project.** odd-board is not affiliated with, sponsored or endorsed by the Gentle AI project or its maintainers. Gentle AI™ and Engram™ are trademarks of Alan Buscaglia. odd-board only reads the files ODD produces and is compatible with Gentle AI v4.3.1.
 
 ## How it works
 
