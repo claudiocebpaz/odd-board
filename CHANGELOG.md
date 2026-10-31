@@ -5,9 +5,10 @@ All notable changes to this project are documented here. The format follows [Kee
 ## [Unreleased]
 
 ### Added
-- `.env.example` lists every environment variable the project reads (none at runtime today, plus the `NPM_TOKEN` CI secret); `.env` is gitignored. A test fails when `bin/` or `src/` reads a variable missing from `.env.example`. `AGENTS.md` and `CONTRIBUTING.md` require keeping them in sync.
+- `.env.example` lists every environment variable the project reads (none at runtime today); `.env` is gitignored. A test fails when `bin/` or `src/` reads a variable missing from `.env.example`. `AGENTS.md` and `CONTRIBUTING.md` require keeping them in sync.
 
 ### Changed
+- Releases are automatic: on every push to `main`, `scripts/release.js` reads the Conventional Commits since the last tag and, for a `feat`, `fix`, `perf` or breaking change, bumps the version, moves the Unreleased changelog entries, tags, publishes to npm with trusted publishing (OIDC, no `NPM_TOKEN`) and creates the GitHub release. `docs` and `chore` commits never publish. `docs/releasing.md` describes it and the one-time Trusted Publisher setup.
 - README restructured as a sibling of gentle-ai's: centered header with badges and navigation, the problem first, one section per feature (columns, parallel agents, deterministic vs heuristic, zero dependencies) with its image, "Back to top" links, an About the author section and a trademark notice in the footer. Colors come from the board UI, not from gentle-ai's brand.
 - The disclaimer and notices follow gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia. The red "Unofficial community project" callout became one small line under the navigation; the full notice is in the footer.
 - The `engram` npm keyword was removed because odd-board does not read Engram.

@@ -1,26 +1,65 @@
 name: Release
 
+# Runs on every push to main. scripts/release.js reads the Conventional Commits
+# since the last v* tag: feat, fix, perf or a breaking change release a new
+# version; docs, chore, ci, test and refactor do not. When it releases, the job
+# bumps package.json and CHANGELOG.md, commits, tags, publishes to npm and
+# creates the GitHub release.
+#
+# npm publishing uses trusted publishing (OIDC): no stored token. The package's
+# Trusted Publisher on npmjs.com must name this repository and this workflow
+# file. See docs/releasing.md.
+
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
   id-token: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or later; Node 22 ships npm 10.
+      - run: npm install -g npm@11
       - run: npm test
-      - run: npm publish --provenance --access public
+      - name: Decide the next version
+        id: plan
+        run: echo "version=$(node scripts/release.js plan)" >> "$GITHUB_OUTPUT"
+      - name: Nothing to release
+        if: steps.plan.outputs.version == ''
+        run: echo "No feat, fix, perf or breaking change since the last tag. Nothing to publish."
+      - name: Bump, commit and tag
+        if: steps.plan.outputs.version != ''
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
+          VERSION: ${{ steps.plan.outputs.version }}
+        run: |
+          node scripts/release.js apply "$VERSION" "$RUNNER_TEMP/notes.md"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(release): $VERSION"
+          git tag "v$VERSION"
+          git push origin HEAD:main "v$VERSION"
+      - name: Publish to npm
+        if: steps.plan.outputs.version != ''
+        run: npm publish --provenance --access public
+      - name: Create the GitHub release
+        if: steps.plan.outputs.version != ''
+        env:
+          VERSION: ${{ steps.plan.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "v$VERSION" --title "v$VERSION" --notes-file "$RUNNER_TEMP/notes.md" --verify-tag

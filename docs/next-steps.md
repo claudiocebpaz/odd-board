@@ -1,6 +1,6 @@
 # Next steps
 
-Current version: **0.2.1**. Repository: https://github.com/claudiocebpaz/odd-board (public, not yet on npm). Pick up from here.
+Current version: **0.2.1**. Repository: https://github.com/claudiocebpaz/odd-board (public). npm: https://www.npmjs.com/package/odd-board. Pick up from here.
 
 ## 1. Publish to npm
 
@@ -8,9 +8,8 @@ The full procedure is in [docs/releasing.md](releasing.md).
 
 1. ~~Create the GitHub repository and push~~ Done: https://github.com/claudiocebpaz/odd-board
 2. ~~Make the repository public~~ Done on 2026-10-31.
-3. **Owner:** create an npm granular access token and store it as the `NPM_TOKEN` secret ([docs/releasing.md](releasing.md#one-time-setup-npm-credential-owner-only)). This is the only step an agent cannot do.
-4. Tag and push `v0.2.1` from `main`; `.github/workflows/release.yml` tests, publishes with provenance and creates the GitHub release. `npm view odd-board` returned 404 on 2026-10-31, so the name is still free.
-5. After the first publish, switch to trusted publishing and delete the token.
+3. ~~First publish~~ Done by hand on 2026-10-31: `odd-board@0.2.1`. The tag workflow could not create the package with a token.
+4. **Owner:** configure the Trusted Publisher on npmjs.com and delete the `NPM_TOKEN` secret ([docs/releasing.md](releasing.md#one-time-setup-trusted-publisher-owner-only)). From then on every `feat` or `fix` merged to `main` is published automatically (see `docs/releasing.md`).
 
 ## 2. ~~Validate with real ODD output~~ Done (gentle-ai v4.3.1)
 

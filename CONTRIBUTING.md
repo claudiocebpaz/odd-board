@@ -153,7 +153,7 @@ Do not run `gentle-ai install` or `gentle-ai sync` in this repository. Even with
 
 ## Commit Convention
 
-This project uses [Conventional Commits](https://www.conventionalcommits.org/).
+This project uses [Conventional Commits](https://www.conventionalcommits.org/). Commit types also drive releases: a `feat`, `fix`, `perf` or breaking change merged to `main` is published to npm automatically; `docs`, `chore`, `ci`, `test` and `refactor` are not. See [docs/releasing.md](docs/releasing.md).
 
 ```
 ^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9\._-]+\))?!?: .+
