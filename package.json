@@ -40,10 +40,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWNER/odd-board.git"
+    "url": "git+https://github.com/claudiocebpaz/odd-board.git"
   },
   "bugs": {
-    "url": "https://github.com/OWNER/odd-board/issues"
+    "url": "https://github.com/claudiocebpaz/odd-board/issues"
   },
-  "homepage": "https://github.com/OWNER/odd-board#readme"
+  "homepage": "https://github.com/claudiocebpaz/odd-board#readme"
 }

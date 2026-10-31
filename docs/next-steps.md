@@ -1,14 +1,11 @@
 # Next steps
 
-Current version: **0.2.0** (local repository, not yet on GitHub or npm). Pick up from here.
+Current version: **0.2.0**. Repository: https://github.com/claudiocebpaz/odd-board (not yet on npm). Pick up from here.
 
 ## 1. Publish (manual, needs the owner)
 
-1. Choose the GitHub owner (personal account or an organization) and replace `OWNER` in `package.json` and `CONTRIBUTING.md`.
-2. Create the repository and push:
-   ```bash
-   gh repo create <owner>/odd-board --public --source . --push
-   ```
+1. ~~Create the GitHub repository and push~~ Done: https://github.com/claudiocebpaz/odd-board
+2. Make sure the repository is public if it is not yet.
 3. Add the `NPM_TOKEN` secret to the GitHub repository (npm automation token).
 4. Release:
    ```bash

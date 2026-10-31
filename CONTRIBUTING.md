@@ -20,7 +20,7 @@ The most valuable issue is a real feature document that odd-board gets wrong. Pl
 ## Development
 
 ```bash
-git clone https://github.com/OWNER/odd-board.git
+git clone https://github.com/claudiocebpaz/odd-board.git
 cd odd-board
 npm test
 npm run demo
