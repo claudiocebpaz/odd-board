@@ -114,8 +114,10 @@
 
   function taskItem(t) {
     const state = t.done ? 'done' : t.current ? 'current' : 'open';
-    const icon = t.done ? '✓' : t.current ? '●' : '○';
-    const sub = t.done ? (t.commit ? `commit ${t.commit}` : 'done') : t.current ? 'in progress' : 'pending';
+    const icon = t.done ? '✓' : t.dropped ? '–' : t.current ? '●' : '○';
+    const sub = t.done
+      ? (t.commit ? `commit ${t.commit}` : 'done')
+      : t.dropped ? 'dropped' : t.blocked ? 'blocked' : t.current ? 'in progress' : 'pending';
     return el('li', { class: state }, el('span', { class: 'ic' }, icon), el('div', {}, `${t.id}. ${t.text}`, el('small', {}, sub)));
   }
 

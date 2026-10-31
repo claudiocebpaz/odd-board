@@ -15,7 +15,7 @@ Sources: gentle-ai README, `docs/usage.md`, `docs/intended-usage.md`, `docs/quic
 - **Seven stages:** Authorize, Explore, Resolve uncertainty, Classify, Track (before the first write), Implement task by task, Close with verified results.
 - **Only Track, Implement and Close leave a trace on disk.** The first four happen inside the agent session. Small work (understood, contained risk, resumable from the diff) never gets a feature document.
 - **The feature document has sections, not a schema:** objective, problem and why, scope, constraints, an actionable checklist with stable IDs and acceptance criteria, verification evidence, progress, next step. Progress and next step are free text.
-- **There is no status field, no frontmatter, and no task-state enum.** The only task marker is a checkbox, checked "only with observed proof". Tasks can be added or reopened with a reason. The commit that holds each task is recorded as evidence.
+- **There is no status field, no frontmatter, and no task-state enum.** The documented task marker is a checkbox, checked "only with observed proof". In practice (gentle-ai v4.3.1's own documents) agents also write task state as a `Status` table column, `T1 | ... | done | commit: <sha>` items, `1. [done] ...` and `; done, commit <sha>` clauses, plus a `## Specs` and an append-only `## Log` section. Tasks can be added or reopened with a reason. The commit that holds each task is recorded as evidence.
 - **Engram mirror:** topic `odd/<feature>/tasks` holds a full copy of the document plus the file locator. If memory is unavailable, ODD records a pending sync instead of claiming success.
 - **Commits:** every completed task closes with a reviewable work-unit commit on the feature branch (about 400 changed lines per slice). Push, PR and merge are separate user decisions.
 - **No worktree per task.** ODD works task by task on the feature branch. Parallel writers are used only for independent units with disjoint edit surfaces. gentle-shell shows "subagent worktrees"; in Claude Code, worktree isolation is a Claude Code feature (`isolation: worktree` on a subagent), not something ODD documents.
@@ -30,7 +30,7 @@ Sources: gentle-ai README, `docs/usage.md`, `docs/intended-usage.md`, `docs/quic
 | Columns are derived, never stored | ODD has no status field; a card is in a column because the document says so |
 | Columns follow ODD stages that leave a trace: Tracked, Implementing, Verifying, Closed | The four pre-Track stages are invisible on disk |
 | Blocked is a flag, not a column | Shows in which stage work stalled |
-| Task counts from checkboxes only | Deterministic; ODD only checks with proof |
+| Task counts from the state each task records | Deterministic; ODD only marks done with proof. Real documents use checkboxes, status tables, `T1 \| ... \| done` items, `1. [done]` and `; done, commit <sha>` clauses; non-checkbox formats are read only inside a tasks section. Dropped tasks are not counted |
 | Blocked and pending checks from wording (EN and ES) | Heuristic; the only source available. A cheap-model extractor is planned to improve it |
 | Optional `status` frontmatter override | A convention on top of ODD for users who want determinism; never required |
 | Parallel work comes only from git | ODD records nothing about parallelism; git knows worktrees and activity for certain |
@@ -61,7 +61,7 @@ The planned GitHub column ("In PR") and issue links in `docs/roadmap.md` come fr
 
 ## Known risks
 
-- **Not yet validated against a real gentle-ai feature document.** The parser was built from the documented sections and simulated examples. The first real document should become a fixture (`examples/` or `test/fixtures/<gentle-ai-version>/`).
+- ~~**Not yet validated against a real gentle-ai feature document.**~~ Validated on 2026-10-31 against all 54 feature documents in gentle-ai v4.3.1; fixtures in `test/fixtures/gentle-ai-v4.3.1/`. Remaining disagreements are listed in that folder's README.
 - ODD's document format can change between gentle-ai releases. Keep the parser tolerant and pin tested versions in the README.
-- Blocked detection is wording-based and can miss or misfire.
+- Blocked and pending-check detection is wording-based and can miss or misfire. On real documents the main miss is history: ODD logs are append-only, and wording cannot tell a failure that was fixed later from a current one.
 - In a monorepo, worktree activity counts changes anywhere in the repository, not only under the subfolder.
