@@ -1,5 +1,11 @@
 # odd-board
 
+> [!CAUTION]
+> ## Unofficial community project
+> **odd-board is not affiliated with, endorsed by, or supported by [Gentleman Programming](https://github.com/Gentleman-Programming) or the [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) project.**
+>
+> ODD, Gentle-AI and Engram are their projects and trademarks. odd-board is an independent tool that only reads the files ODD produces. Please report odd-board problems here, not to gentle-ai.
+
 A live Kanban board for **ODD (Organic Driven Development)** feature documents, with parallel agents made visible.
 
 `odd-board` reads the `odd/tasks/*.md` files that ODD writes, in your repository and in every git worktree, and shows each tracked feature as a card that moves on its own as your agents work. It also shows which agents are working right now and on what. No backend, no database, no account, and zero runtime dependencies.
@@ -10,8 +16,6 @@ A live Kanban board for **ODD (Organic Driven Development)** feature documents, 
 npx odd-board            # in a repository that uses ODD
 npx odd-board --demo     # temporary repo with simulated agents working in parallel
 ```
-
-> **Unofficial community project.** odd-board is not affiliated with or endorsed by Gentleman Programming. ODD, Gentle-AI and Engram are their projects; this tool only reads the files ODD produces.
 
 ## How it works
 
