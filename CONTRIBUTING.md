@@ -124,6 +124,10 @@ npm test
 npm run demo
 ```
 
+### Environment variables
+
+Every environment variable the project reads is listed in [`.env.example`](.env.example). Copy it to `.env` (gitignored) and fill in what you need: `cp .env.example .env`. If your change makes the code read a new variable, add it to `.env.example` in the same commit; `npm test` fails otherwise. Never commit `.env` or a real secret.
+
 ### Testing
 
 Tests use Node's built-in test runner (`npm test`). When you fix a parsing case, add the document to `test/fixtures/` or `examples/` with a test so it never regresses. CI runs the tests on Node 18, 20 and 22, plus `node bin/odd-board.js --demo --json`.
