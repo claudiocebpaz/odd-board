@@ -4,6 +4,9 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+- `.env.example` lists every environment variable the project reads (none at runtime today, plus the `NPM_TOKEN` CI secret); `.env` is gitignored. A test fails when `bin/` or `src/` reads a variable missing from `.env.example`. `AGENTS.md` and `CONTRIBUTING.md` require keeping them in sync.
+
 ## [0.2.1] - 2026-10-31
 
 Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A representative set is now a test fixture (`test/fixtures/gentle-ai-v4.3.1/`).

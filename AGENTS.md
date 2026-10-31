@@ -17,6 +17,13 @@ A read-only, zero-dependency Kanban board for ODD feature documents (`odd/tasks/
 - Every parsing fix ships with a test using a real-looking document.
 - Keep `README.md` and `CHANGELOG.md` in sync with behavior changes.
 
+## Environment variables
+- `.env.example` (committed) lists every environment variable the code, scripts, tests or tooling read: name, a safe default or empty value, what reads it and whether it is required. `.env` (gitignored, never committed) holds the real local values; create it with `cp .env.example .env`.
+- Whenever a change adds, renames or removes a variable, update `.env.example` in the same commit, and tell the user to update their `.env`. If the variable is user-facing, document it in `README.md` too.
+- `test/env-example.test.js` fails when `bin/` or `src/` reads a `process.env` variable missing from `.env.example`.
+- CI secrets (for example `NPM_TOKEN`) live in GitHub repository secrets, set by the owner. List them in the CI section of `.env.example` without values.
+- Agents never write, read back, print or commit real secret values, in `.env` or anywhere else.
+
 ## Contribution rules
 - Commits follow Conventional Commits; branches follow `<type>/<slug>` (see `CONTRIBUTING.md`).
 - Every PR links to an issue, fills in `.github/pull_request_template.md` and stays within about 400 changed lines.
