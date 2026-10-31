@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+- Contribution workflow modeled on gentle-ai: issue templates (Parsing Problem, Bug Report, Feature Request) with blank issues off, a structured PR template with AI-assistance disclosure, `AI_POLICY.md`, `CONTRIBUTORS.md`, and a label catalog (`type:`, `status:`, `priority:`, `area:`).
+- `CONTRIBUTING.md` now documents the issue-first workflow, labels, Conventional Commits, branch naming and the PR size budget.
+
 ### Fixed
 - Numbers in task text (for example "10000000 rows") are no longer read as commits. A bare hash must mix letters and digits; hashes next to `evidence`/`commit` or in backticks are always accepted.
 - Indented checkboxes under a task (acceptance criteria) no longer count as tasks.

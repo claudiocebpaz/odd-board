@@ -1,0 +1,47 @@
+name: "✨ Feature Request"
+description: Propose a new capability for odd-board
+title: "feat: "
+labels: ["type:feature", "status:needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        odd-board stays read-only, derives columns instead of storing them, and has zero runtime dependencies. Proposals that need to break one of those rules should say why.
+
+  - type: checkboxes
+    id: prereqs
+    attributes:
+      label: Pre-flight Checks
+      options:
+        - label: I searched existing issues and the [roadmap](https://github.com/claudiocebpaz/odd-board/blob/main/docs/roadmap.md)
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What can you not see or do today? Describe the situation, not the solution.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Source of Truth
+      description: Where would the data come from? (ODD feature document, git, GitHub, ...) odd-board never infers parallel work from document text.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+    validations:
+      required: false
