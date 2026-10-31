@@ -22,9 +22,9 @@ Current version: **0.2.0**. Repository: https://github.com/claudiocebpaz/odd-boa
 
 When a new gentle-ai release ships, re-run the same check: fetch `odd/tasks/*.md` at the new tag and compare the board with what the documents say.
 
-## 3. README demo GIF
+## 3. ~~README demo GIF~~ Done
 
-Run `npx odd-board --demo --open` (or `npm run demo`) and record about 20 seconds: the subagent finishing (agents 3 → 2) and csv-export tasks advancing. Save as `docs/demo.gif` and put it at the top of the README.
+`docs/demo.gif` (960×420, 30 s, about 100 kB) is at the top of the README: the subagent finishing (agents 3 → 2) and csv-export going from 3/6 to 5/6. It was recorded from a fresh `--demo` with headless Chrome (one screenshot every 250 ms over the DevTools protocol), cropped and encoded with ffmpeg. Re-record when the UI changes.
 
 ## 4. v0.3 (see docs/roadmap.md)
 
