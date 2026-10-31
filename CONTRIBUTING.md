@@ -38,6 +38,25 @@ Tests use Node's built-in test runner. When you fix a parsing case, add the docu
 
 This repository includes `AGENTS.md` with the rules above. If you use Claude Code, OpenCode or another agent, it will pick them up.
 
+### Optional: ODD with gentle-ai
+
+The repository also ships a project-scoped [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) setup, so agents working on odd-board follow ODD and odd-board can show its own progress. Everything lives in the repository and nothing is installed globally:
+
+- Claude Code: `.claude/` (instructions, agents, skills, hooks) and `.mcp.json`.
+- OpenCode: `opencode.json` and `.opencode/`.
+
+To use it, install these and make sure they are on your `PATH`:
+
+- `gentle-ai` (tested with 4.3.1). The Claude Code hooks call it, so without it they report errors.
+- `engram` (tested with 3.6.0), the memory server both agents start. Set `ENGRAM_BIN` if your binary has another name or location.
+
+Then:
+
+- Claude Code asks you to approve the project MCP servers in `.mcp.json` the first time.
+- OpenCode needs its plugin dependencies once: `npm install --prefix .opencode`.
+
+Do not run `gentle-ai install` or `gentle-ai sync` in this repository. Even with workspace scope they write to your global agent configuration, and the files here are already set up.
+
 ## Code of conduct
 
 By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
