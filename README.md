@@ -50,8 +50,9 @@ Authorize, Explore, Resolve uncertainty and Classify happen inside the agent ses
 
 ODD does not define a status field or a fixed document schema. So:
 
-- **Deterministic:** task counts and progress come from checkboxes (`- [ ]` / `- [x]`). ODD only checks a task off with observed proof.
-- **Heuristic:** "blocked" and "pending checks" are detected from wording in the Progress, Next step and Evidence sections (English and Spanish).
+- **Deterministic:** task counts and progress come from checkboxes (`- [ ]` / `- [x]`). ODD only checks a task off with observed proof. Indented checkboxes under a task (acceptance criteria) and checkboxes inside code blocks are not counted as tasks.
+- **Commits:** a task's commit is a hash next to `evidence`/`commit` or in backticks. A bare hash must mix letters and digits, so numbers in the task text are not taken for commits.
+- **Heuristic:** "blocked" and "pending checks" are detected from wording in the Progress, Next step and Evidence sections (English and Spanish). Negations ("no longer blocked"), waiting on CI, and test summaries with zero failures ("42 passed, 0 failed") are ignored.
 - **Optional override:** if a document has frontmatter with `status: planned | in-progress | verifying | blocked | done`, it wins. This is a convention on top of ODD, not part of it.
 
 Documents odd-board cannot understand are shown as `unparsed`. They are never dropped and never break the board.
