@@ -33,8 +33,7 @@
     "kanban",
     "ai-agents",
     "claude-code",
-    "opencode",
-    "engram"
+    "opencode"
   ],
   "author": "Claudio Ceballos Paz",
   "license": "MIT",

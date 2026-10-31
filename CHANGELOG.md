@@ -7,6 +7,11 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Added
 - `.env.example` lists every environment variable the project reads (none at runtime today, plus the `NPM_TOKEN` CI secret); `.env` is gitignored. A test fails when `bin/` or `src/` reads a variable missing from `.env.example`. `AGENTS.md` and `CONTRIBUTING.md` require keeping them in sync.
 
+### Changed
+- README restructured as a sibling of gentle-ai's: centered header with badges and navigation, the problem first, one section per feature (columns, parallel agents, deterministic vs heuristic, zero dependencies) with its image, "Back to top" links, an About the author section and a trademark notice in the footer. Colors come from the board UI, not from gentle-ai's brand.
+- The disclaimer and notices follow gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia. The red "Unofficial community project" callout stays at the top.
+- The `engram` npm keyword was removed because odd-board does not read Engram.
+
 ## [0.2.1] - 2026-10-31
 
 Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A representative set is now a test fixture (`test/fixtures/gentle-ai-v4.3.1/`).

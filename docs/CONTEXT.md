@@ -39,7 +39,7 @@ Sources: gentle-ai README, `docs/usage.md`, `docs/intended-usage.md`, `docs/quic
 | Active = changed within a window (default 10 min) | Uncommitted file mtimes or a recent commit; configurable with `--window` |
 | Zero runtime dependencies, no build step, single HTML UI | Smallest possible `npx` tool (about 17 kB); Vite was considered and dropped for v0.x |
 | Polling every 2 s, push over SSE only on change | Works across many worktrees without per-folder watchers |
-| MIT, "unofficial community project" disclaimer, no "Gentle" in the name | Matches the ecosystem's license; Gentle-AI and gentle-shell are trademarked |
+| MIT, "unofficial community project" disclaimer, no "Gentle" in the name | Matches the ecosystem's license; Gentle AI and Engram are trademarks of Alan Buscaglia ([TRADEMARKS.md](https://github.com/Gentleman-Programming/gentle-ai/blob/main/TRADEMARKS.md)); only truthful, nominative references are allowed |
 | Name `odd-board` | Free on npm when checked on 2026-10-31 (`oddboard` and `odd-kanban` too) |
 
 ## Conventions users must follow for the best result
