@@ -23,15 +23,7 @@
 <a href="CONTRIBUTING.md"><strong>Contributing</strong></a>
 </p>
 
-</div>
-
-> [!CAUTION]
-> ## Unofficial community project
-> **odd-board is not affiliated with, sponsored by, or endorsed by the [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai) project or its author.**
->
-> Gentle AI™ and Engram™ are trademarks of Alan Buscaglia. odd-board is an independent tool that only reads the files ODD produces. Please report odd-board problems here, not to gentle-ai.
-
-<div align="center">
+<sub>Unofficial community project, not affiliated with or endorsed by <a href="https://github.com/Gentleman-Programming/gentle-ai">Gentle AI</a>. Report odd-board problems here, not to gentle-ai.</sub>
 
 <p>
 ODD keeps one feature document per feature, and your agents keep it current while they work.

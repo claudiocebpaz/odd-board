@@ -9,7 +9,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 - README restructured as a sibling of gentle-ai's: centered header with badges and navigation, the problem first, one section per feature (columns, parallel agents, deterministic vs heuristic, zero dependencies) with its image, "Back to top" links, an About the author section and a trademark notice in the footer. Colors come from the board UI, not from gentle-ai's brand.
-- The disclaimer and notices follow gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia. The red "Unofficial community project" callout stays at the top.
+- The disclaimer and notices follow gentle-ai's `TRADEMARKS.md`: Gentle AI™ and Engram™ are credited to their owner, Alan Buscaglia. The red "Unofficial community project" callout became one small line under the navigation; the full notice is in the footer.
 - The `engram` npm keyword was removed because odd-board does not read Engram.
 
 ## [0.2.1] - 2026-10-31
