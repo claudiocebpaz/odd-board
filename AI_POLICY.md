@@ -27,7 +27,7 @@ Raw prompts and conversation logs are not required. Trivial formatting, spelling
 
 ## Attribution
 
-Commits may carry an `Assisted-by: <tool or model>` trailer. The pull request declaration is sufficient on its own.
+AI tools must not receive human attribution: no `Co-Authored-By`, `Reviewed-by`, `Tested-by` or `Signed-off-by` trailers for them. Commits made with material AI assistance carry an `Assisted-by: <tool> (<model>)` trailer instead, for example `Assisted-by: Claude Code (Claude Opus 5.5)`. The pull request declaration is still required.
 
 ## Submission Quality
 

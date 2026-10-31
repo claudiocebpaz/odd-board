@@ -28,7 +28,7 @@ Thanks for helping. odd-board is small on purpose: zero runtime dependencies, re
 **Every PR links to an issue.**
 
 1. **Open an issue** with the right template: [Parsing Problem](https://github.com/claudiocebpaz/odd-board/issues/new?template=parsing_problem.yml), [Bug Report](https://github.com/claudiocebpaz/odd-board/issues/new?template=bug_report.yml) or [Feature Request](https://github.com/claudiocebpaz/odd-board/issues/new?template=feature_request.yml).
-2. **Wait for `status:approved`** before starting anything larger than a small fix. Issues labelled `status:needs-info` or `status:needs-design` need discussion first.
+2. **Check the status.** `status:approved` is not required to open a PR while the project has a single maintainer, but issues labelled `status:needs-info` or `status:needs-design` need discussion first, or the work may be thrown away.
 3. **Comment on the issue** to say you are taking it.
 4. **Open a PR** that references the issue (`Closes #<number>` or `Refs #<number>`).
 

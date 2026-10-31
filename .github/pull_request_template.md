@@ -75,6 +75,7 @@ node bin/odd-board.js --demo --json > /dev/null
 - [ ] `README.md` and `CHANGELOG.md` (under Unreleased) updated if behavior changed
 - [ ] Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
 - [ ] I understand, reviewed, and take responsibility for the complete submission
+- [ ] AI-assisted commits use `Assisted-by`, never `Co-Authored-By`
 
 ---
 
