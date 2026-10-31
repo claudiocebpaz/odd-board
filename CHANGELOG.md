@@ -4,9 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-31
+
 Validated against the 54 real ODD feature documents in gentle-ai v4.3.1. A representative set is now a test fixture (`test/fixtures/gentle-ai-v4.3.1/`).
 
 ### Added
+- `docs/releasing.md`: npm credential setup and the release procedure.
 - README links the npm package, adds Install (npx, global, from source) and a "Requirements and dependencies" section: Node.js 18.18+, optional git 2.28+, a browser, optional gentle-ai, and zero runtime dependencies.
 - README opens with a red "Unofficial community project" callout stating odd-board is not affiliated with Gentleman Programming or gentle-ai.
 - README opens with a demo GIF (`docs/demo.gif`) of `--demo`: a subagent finishing and CSV export tasks advancing.

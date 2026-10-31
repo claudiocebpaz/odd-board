@@ -1,18 +1,16 @@
 # Next steps
 
-Current version: **0.2.0**. Repository: https://github.com/claudiocebpaz/odd-board (not yet on npm). Pick up from here.
+Current version: **0.2.1**. Repository: https://github.com/claudiocebpaz/odd-board (public, not yet on npm). Pick up from here.
 
-## 1. Publish (manual, needs the owner)
+## 1. Publish to npm
+
+The full procedure is in [docs/releasing.md](releasing.md).
 
 1. ~~Create the GitHub repository and push~~ Done: https://github.com/claudiocebpaz/odd-board
-2. Make sure the repository is public if it is not yet.
-3. Add the `NPM_TOKEN` secret to the GitHub repository (npm automation token).
-4. Release:
-   ```bash
-   git tag v0.2.0 && git push --tags
-   ```
-   `.github/workflows/release.yml` runs the tests, publishes to npm with provenance and creates the GitHub release.
-5. Check the name is still free right before publishing: `npm view odd-board` should return 404.
+2. ~~Make the repository public~~ Done on 2026-10-31.
+3. **Owner:** create an npm granular access token and store it as the `NPM_TOKEN` secret ([docs/releasing.md](releasing.md#one-time-setup-npm-credential-owner-only)). This is the only step an agent cannot do.
+4. Tag and push `v0.2.1` from `main`; `.github/workflows/release.yml` tests, publishes with provenance and creates the GitHub release. `npm view odd-board` returned 404 on 2026-10-31, so the name is still free.
+5. After the first publish, switch to trusted publishing and delete the token.
 
 ## 2. ~~Validate with real ODD output~~ Done (gentle-ai v4.3.1)
 
