@@ -23,7 +23,7 @@
 <a href="CONTRIBUTING.md"><strong>Contributing</strong></a>
 </p>
 
-<sub>Unofficial community project, not affiliated with or endorsed by <a href="https://github.com/Gentleman-Programming/gentle-ai">Gentle AI</a>. Report odd-board problems here, not to gentle-ai.</sub>
+<sub>⚠️ Unofficial community project, not affiliated with or endorsed by <a href="https://github.com/Gentleman-Programming/gentle-ai">Gentle AI</a>. Report odd-board problems here, not to gentle-ai.</sub>
 
 <p>
 ODD keeps one feature document per feature, and your agents keep it current while they work.
