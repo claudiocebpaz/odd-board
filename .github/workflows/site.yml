@@ -1,0 +1,113 @@
+name: Site
+
+# Publishes https://claudiocebpaz.github.io/odd-board/ to GitHub Pages.
+#
+# The website source lives in the private repository claudiocebpaz/odd-board-site.
+# GitHub Pages serves a project site under the name of the repository that
+# deploys it, so odd-board deploys it to keep the /odd-board/ URL. The job checks
+# the site out with a read-only deploy key (secret SITE_DEPLOY_KEY), builds it,
+# adds version.json with the site commit, and deploys the result. Only the built
+# files become public. See docs/website.md.
+#
+# A manual run or a change to this file always deploys. The hourly run deploys
+# only when the site's main branch moved since the live version.json.
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/site.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  SITE_REPOSITORY: claudiocebpaz/odd-board-site
+  SITE_URL: https://claudiocebpaz.github.io/odd-board/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.compare.outputs.changed }}
+    steps:
+      - name: Require the deploy key
+        env:
+          SITE_DEPLOY_KEY: ${{ secrets.SITE_DEPLOY_KEY }}
+        run: |
+          if [ -z "$SITE_DEPLOY_KEY" ]; then
+            echo "::error::Secret SITE_DEPLOY_KEY is not set. See docs/website.md."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.SITE_REPOSITORY }}
+          ref: main
+          ssh-key: ${{ secrets.SITE_DEPLOY_KEY }}
+          persist-credentials: false
+          path: site
+
+      - name: Compare with the live site
+        id: compare
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          sha=$(git -C site rev-parse HEAD)
+          live=$(curl -fsSL -H "Cache-Control: no-cache" "${SITE_URL}version.json?t=$(date +%s)" 2>/dev/null | jq -r '.sha // empty' 2>/dev/null || true)
+          echo "site main: $sha"
+          echo "live:      ${live:-none}"
+          if [ "$EVENT" = "schedule" ] && [ "$sha" = "$live" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.compare.outputs.changed == 'true'
+        with:
+          node-version-file: site/.nvmrc
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Build and verify
+        if: steps.compare.outputs.changed == 'true'
+        working-directory: site
+        run: |
+          npm ci
+          npm run check
+          npm run build
+          npm run verify
+
+      - name: Record the deployed commit
+        if: steps.compare.outputs.changed == 'true'
+        env:
+          SHA: ${{ steps.compare.outputs.sha }}
+        run: |
+          jq -n --arg sha "$SHA" '{sha: $sha}' > site/dist/version.json
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.compare.outputs.changed == 'true'
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

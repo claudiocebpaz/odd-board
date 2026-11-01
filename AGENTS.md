@@ -45,3 +45,4 @@ A read-only, zero-dependency Kanban board for ODD feature documents (`odd/tasks/
 - `src/server.js` HTTP + SSE server and file watcher
 - `public/index.html` the board UI (no build step)
 - `examples/demo-repo` sample ODD documents used by `--demo` and tests
+- `.github/workflows/site.yml` builds and deploys the website from the private repository `claudiocebpaz/odd-board-site` (see `docs/website.md`). The website source never lives in this repository.

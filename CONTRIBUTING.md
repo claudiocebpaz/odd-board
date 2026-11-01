@@ -151,6 +151,10 @@ Then:
 
 Do not run `gentle-ai install` or `gentle-ai sync` in this repository. Even with workspace scope they write to your global agent configuration, and the files here are already set up.
 
+### Website
+
+The website at [claudiocebpaz.github.io/odd-board](https://claudiocebpaz.github.io/odd-board/) is built from a separate, private repository and deployed by `.github/workflows/site.yml`. To suggest a change to it, open an issue here. See [docs/website.md](docs/website.md).
+
 ## Commit Convention
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/). Commit types also drive releases: a `feat`, `fix`, `perf` or breaking change merged to `main` is published to npm automatically; `docs`, `chore`, `ci`, `test` and `refactor` are not. See [docs/releasing.md](docs/releasing.md).
