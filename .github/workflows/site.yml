@@ -11,6 +11,7 @@ name: Site
 #
 # A manual run or a change to this file always deploys. The hourly run deploys
 # only when the site's main branch moved since the live version.json.
+# Forks skip it: the job runs only in claudiocebpaz/odd-board.
 
 on:
   schedule:
@@ -33,6 +34,7 @@ env:
 
 jobs:
   build:
+    if: github.repository == 'claudiocebpaz/odd-board'
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.compare.outputs.changed }}

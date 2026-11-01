@@ -25,7 +25,7 @@ When a new gentle-ai release ships, re-run the same check: fetch `odd/tasks/*.md
 
 ## 3b. Website (in progress)
 
-https://claudiocebpaz.github.io/odd-board/, built with Astro from the private repository `claudiocebpaz/odd-board-site` and deployed by `.github/workflows/site.yml`. Tracked in `odd/tasks/website.md`; setup and rotation in [docs/website.md](website.md).
+https://claudiocebpaz.github.io/odd-board/, built with Astro from the private repository `claudiocebpaz/odd-board-site` and deployed by `.github/workflows/site.yml`. Tracked in `odd/tasks/website.md`; deploy setup and maintenance are documented in the private site repository.
 
 1. Create `odd-board-site` (private) and build the site: scaffold and CI, English landing, then Spanish, OG banner, 404 and sitemap.
 2. **Owner:** set Pages source to GitHub Actions, add the deploy key and the `SITE_DEPLOY_KEY` secret, set the repository homepage, and run the Site workflow once.
