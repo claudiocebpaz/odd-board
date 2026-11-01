@@ -23,12 +23,14 @@ When a new gentle-ai release ships, re-run the same check: fetch `odd/tasks/*.md
 
 `docs/demo.gif` (960×420, 30 s, about 100 kB) is at the top of the README: the subagent finishing (agents 3 → 2) and csv-export going from 3/6 to 5/6. It was recorded from a fresh `--demo` with headless Chrome (one screenshot every 250 ms over the DevTools protocol), cropped and encoded with ffmpeg. Re-record when the UI changes, and copy the new GIF to the website repository too.
 
-## 3b. Website (in progress)
+## 3b. ~~Website~~ Done
 
-https://claudiocebpaz.github.io/odd-board/, built with Astro from the private repository `claudiocebpaz/odd-board-site` and deployed by `.github/workflows/site.yml`. Tracked in `odd/tasks/website.md`; setup and rotation in [docs/website.md](website.md).
+Live since 2026-11-01 at https://claudiocebpaz.github.io/odd-board/ (English) and `/es/` (Spanish). It is built with Astro from the private repository `claudiocebpaz/odd-board-site` and deployed by `.github/workflows/site.yml`. Tracked in `odd/tasks/website.md`; setup and key rotation are in [docs/website.md](website.md).
 
-1. Create `odd-board-site` (private) and build the site: scaffold and CI, English landing, then Spanish, OG banner, 404 and sitemap.
-2. **Owner:** set Pages source to GitHub Actions, add the deploy key and the `SITE_DEPLOY_KEY` secret, set the repository homepage, and run the Site workflow once.
+1. ~~Create `odd-board-site` (private) and build the site~~ Done: odd-board-site#1 merged.
+2. ~~**Owner:** Pages source, deploy key, `SITE_DEPLOY_KEY` secret, homepage, first deploy~~ Done: the merge of #17 ran the first deploy.
+
+From now on, a merge to the site repository's `main` goes live within an hour. To publish at once, run the Site workflow by hand from the Actions tab.
 
 ## 4. v0.3 (see docs/roadmap.md)
 
